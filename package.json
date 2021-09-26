@@ -1,0 +1,43 @@
+{
+  "name": "qualinpress-framework",
+  "version": "1.0.0",
+  "description": "QualIn cypress based framework",
+  "main": "index.js",
+  "scripts": {
+    "delete:reports": "del /f /s /q testresults\\reports",
+    "remove:reports": "rd /s /q testresults\\reports",
+    "pretest": "npm install && mkdirp ./testresults/reports && npm run delete:reports && npm run remove:reports && mkdirp ./testresults/reports/mocha ./testresults/reports/mochareports ./testresults/archive",
+    "build": "babel src -d public",
+    "scripts": ".\\node_modules\\.bin\\cypress run --browser chrome --headed",
+    "combine-reports": "mochawesome-merge ./testresults/reports/mocha/*.json > ./testresults/reports/mochareports/output.json",
+    "generate-report": "marge ./testresults/reports/mochareports/output.json -f QualInpressTestResults -o ./testresults/reports --inline -p QualInpressTestResults --autoOpen false",
+    "archive-report": "xcopy /s /i /y testresults\\reports testresults\\archive\\reports_%date:~-4,4%%date:~-10,2%%date:~-7,2%_%time:~0,2%%time:~3,2%",
+    "posttest": "npm run combine-reports && npm run generate-report && npm run archive-report",
+    "test": "npm run scripts || npm run posttest"
+  },
+  "author": "QualIn",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/node": "^7.5.5",
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-register": "^6.26.0",
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "rimraf": "^3.0.2"
+  },
+  "devDependencies": {
+    "@babel/code-frame": "^7.5.5",
+    "@cypress/skip-test": "^2.5.0",
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "cypress": "^8.4.1",
+    "cypress-multi-reporters": "^1.4.0",
+    "mocha": "^8.0.1",
+    "mochawesome": "^6.1.1",
+    "mochawesome-merge": "^4.1.0",
+    "mochawesome-report-generator": "^5.1.0"
+  }
+}
